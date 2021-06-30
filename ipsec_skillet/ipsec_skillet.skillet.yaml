@@ -1,53 +1,24 @@
 name: ipsec_skillet
+
 label: IPSEC Config Skillet
+
 description: Skillet for configuring IKE Gateway and IPSEC tunnel
+
 type: panos
+
 labels:
+
     collection: Unknown
+
 variables: []
+
 snippets:
--   name: update-server-803094
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig/system
-    element: <update-server>updates.paloaltonetworks.com</update-server>
--   name: update-schedule-344707
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig/system
-    element: |-
-        <update-schedule>
-          <threats>
-            <recurring>
-              <weekly>
-                <day-of-week>thursday</day-of-week>
-                <at>11:00</at>
-                <action>download-only</action>
-              </weekly>
-            </recurring>
-          </threats>
-        </update-schedule>
--   name: timezone-512286
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig/system
-    element: <timezone>US/Pacific</timezone>
--   name: service-726500
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig/system
-    element: |-
-        <service>
-          <disable-telnet>yes</disable-telnet>
-          <disable-http>yes</disable-http>
-        </service>
--   name: hostname-964850
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig/system
-    element: <hostname>t131_Prisma-Access-NGFW-1</hostname>
--   name: ip-address-210629
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig/system
-    element: <ip-address>192.168.128.101</ip-address>
--   name: netmask-137220
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig/system
-    element: <netmask>255.255.255.0</netmask>
--   name: default-gateway-801059
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig/system
-    element: <default-gateway>192.168.128.1</default-gateway>
+
 -   name: primary-811415
     xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig/system/dns-setting/servers
     element: <primary>4.2.2.2</primary>
+    cmd: set
+
 -   name: interface-management-profile-816793
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/profiles
     element: |-
@@ -56,6 +27,8 @@ snippets:
             <ping>yes</ping>
           </entry>
         </interface-management-profile>
+    cmd: set
+
 -   name: entry-185007
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/interface/ethernet
     element: |-
@@ -80,6 +53,8 @@ snippets:
             <interface-management-profile>ping-only</interface-management-profile>
           </layer3>
         </entry>
+    cmd: set
+
 -   name: entry-787644
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/interface/ethernet
     element: |-
@@ -104,6 +79,8 @@ snippets:
             <interface-management-profile>ping-only</interface-management-profile>
           </layer3>
         </entry>
+    cmd: set
+
 -   name: tunnel-455683
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/interface
     element: |-
@@ -114,6 +91,8 @@ snippets:
             </entry>
           </units>
         </tunnel>
+    cmd: set
+
 -   name: gateway-4662
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/ike
     element: |-
@@ -154,6 +133,8 @@ snippets:
             <comment>gateway to ngfw2</comment>
           </entry>
         </gateway>
+    cmd: set
+
 -   name: tunnel-466695
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network
     element: |-
@@ -174,6 +155,8 @@ snippets:
             </entry>
           </ipsec>
         </tunnel>
+    cmd: set
+
 -   name: routing-options-164837
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]/protocol/bgp
     element: |-
@@ -182,24 +165,32 @@ snippets:
             <enable>yes</enable>
           </graceful-restart>
         </routing-options>
+    cmd: set
+
 -   name: rip-340980
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]/protocol
     element: |-
         <rip>
           <enable>no</enable>
         </rip>
+    cmd: set
+
 -   name: ospf-395975
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]/protocol
     element: |-
         <ospf>
           <enable>no</enable>
         </ospf>
+    cmd: set
+
 -   name: ospfv3-433852
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]/protocol
     element: |-
         <ospfv3>
           <enable>no</enable>
         </ospfv3>
+    cmd: set
+
 -   name: interface-792448
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]
     element: |-
@@ -208,6 +199,8 @@ snippets:
           <member>ethernet1/2</member>
           <member>tunnel.123</member>
         </interface>
+    cmd: set
+
 -   name: ecmp-550118
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]
     element: |-
@@ -216,6 +209,8 @@ snippets:
             <ip-modulo/>
           </algorithm>
         </ecmp>
+    cmd: set
+
 -   name: routing-table-631221
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]
     element: |-
@@ -250,6 +245,8 @@ snippets:
             </static-route>
           </ip>
         </routing-table>
+    cmd: set
+
 -   name: entry-610309
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/zone
     element: |-
@@ -260,6 +257,8 @@ snippets:
             </layer3>
           </network>
         </entry>
+    cmd: set
+
 -   name: entry-486157
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/zone
     element: |-
@@ -271,6 +270,8 @@ snippets:
             </layer3>
           </network>
         </entry>
+    cmd: set
+
 -   name: password-complexity-677059
     xpath: /config/mgt-config
     element: |-
@@ -278,6 +279,8 @@ snippets:
           <enabled>yes</enabled>
           <minimum-length>8</minimum-length>
         </password-complexity>
+    cmd: set
+
 -   name: class-bandwidth-type-25711
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/qos/profile/entry[@name="default"]
     element: |-
@@ -311,6 +314,8 @@ snippets:
             </class>
           </mbps>
         </class-bandwidth-type>
+    cmd: set
+
 -   name: setting-990758
     xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig
     element: |-
@@ -333,12 +338,16 @@ snippets:
           </management>
           <auto-mac-detect>yes</auto-mac-detect>
         </setting>
+    cmd: set
+
 -   name: user-id-collector-141438
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]
     element: |-
         <user-id-collector>
           <setting/>
         </user-id-collector>
+    cmd: set
+
 -   name: import-151229
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]
     element: |-
@@ -351,6 +360,8 @@ snippets:
             </interface>
           </network>
         </import>
+    cmd: set
+
 -   name: security-721225
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase
     element: |-
@@ -425,3 +436,5 @@ snippets:
             </entry>
           </rules>
         </security>
+    cmd: set
+
