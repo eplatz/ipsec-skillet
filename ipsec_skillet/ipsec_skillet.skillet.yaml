@@ -180,6 +180,14 @@ snippets:
         </tunnel>
     cmd: set
 
+-   name: interface-853149
+    cmd: set
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="{{
+        router_name }}"]
+    element: |-
+        <interface>
+          <member>{{ tunnel_interface_name }}</member>
+        </interface>
 -   name: routing-table-631221
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="{{
         router_name }}"]
