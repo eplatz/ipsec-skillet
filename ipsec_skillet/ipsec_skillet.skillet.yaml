@@ -101,6 +101,16 @@ variables:
     -   key: 'No'
         value: 'no'
 
+-   name: vsys_name
+    description: vsys_name
+    type_hint: text
+    default: ''
+
+-   name: tunnel_zone
+    description: tunnel_zone
+    type_hint: text
+    default: ''
+
 snippets:
 
 -   name: tunnel-455683
@@ -211,3 +221,15 @@ snippets:
         </routing-table>
     cmd: set
 
+-   name: entry-431092
+    cmd: set
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="{{
+        vsys_name }}"]/zone
+    element: |-
+        <entry name="{{ tunnel_zone }}">
+          <network>
+            <layer3>
+              <member>{{ tunnel_interface_name }}</member>
+            </layer3>
+          </network>
+        </entry>
