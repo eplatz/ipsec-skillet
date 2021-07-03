@@ -1,42 +1,21 @@
 name: ipsec_skillet1
+
 label: IPSEC Config Skillet
+
 description: Skillet Generated from 10.70.221.185 using network_pre_ipsec1.xml and
+
     ipsec_config_1.xml
+
 type: panos
+
 labels:
+
     collection: Unknown
+
 variables: []
+
 snippets:
--   name: update-server-118533
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig/system
-    element: <update-server>updates.paloaltonetworks.com</update-server>
--   name: update-schedule-638251
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig/system
-    element: |-
-        <update-schedule>
-          <threats>
-            <recurring>
-              <weekly>
-                <day-of-week>thursday</day-of-week>
-                <at>11:00</at>
-                <action>download-only</action>
-              </weekly>
-            </recurring>
-          </threats>
-        </update-schedule>
--   name: timezone-559828
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig/system
-    element: <timezone>US/Pacific</timezone>
--   name: service-666568
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig/system
-    element: |-
-        <service>
-          <disable-telnet>yes</disable-telnet>
-          <disable-http>yes</disable-http>
-        </service>
--   name: primary-19442
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig/system/dns-setting/servers
-    element: <primary>4.2.2.2</primary>
+
 -   name: tunnel-977376
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/interface
     element: |-
@@ -47,6 +26,8 @@ snippets:
             </entry>
           </units>
         </tunnel>
+    cmd: set
+
 -   name: gateway-267147
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/ike
     element: |-
@@ -87,6 +68,8 @@ snippets:
             <comment>gateway to ngfw2</comment>
           </entry>
         </gateway>
+    cmd: set
+
 -   name: tunnel-261490
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network
     element: |-
@@ -107,9 +90,13 @@ snippets:
             </entry>
           </ipsec>
         </tunnel>
+    cmd: set
+
 -   name: member-106557
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/import/network/interface
     element: <member>tunnel.123</member>
+    cmd: set
+
 -   name: routing-options-577809
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]/protocol/bgp
     element: |-
@@ -118,35 +105,13 @@ snippets:
             <enable>yes</enable>
           </graceful-restart>
         </routing-options>
--   name: rip-497002
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]/protocol
-    element: |-
-        <rip>
-          <enable>no</enable>
-        </rip>
--   name: ospf-773895
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]/protocol
-    element: |-
-        <ospf>
-          <enable>no</enable>
-        </ospf>
--   name: ospfv3-441696
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]/protocol
-    element: |-
-        <ospfv3>
-          <enable>no</enable>
-        </ospfv3>
+    cmd: set
+
 -   name: member-688483
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]/interface
     element: <member>tunnel.123</member>
--   name: ecmp-710627
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]
-    element: |-
-        <ecmp>
-          <algorithm>
-            <ip-modulo/>
-          </algorithm>
-        </ecmp>
+    cmd: set
+
 -   name: routing-table-883316
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]
     element: |-
@@ -181,71 +146,13 @@ snippets:
             </static-route>
           </ip>
         </routing-table>
+    cmd: set
+
 -   name: member-990031
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/zone/entry[@name="user"]/network/layer3
     element: <member>tunnel.123</member>
--   name: password-complexity-278561
-    xpath: /config/mgt-config
-    element: |-
-        <password-complexity>
-          <enabled>yes</enabled>
-          <minimum-length>8</minimum-length>
-        </password-complexity>
--   name: class-bandwidth-type-279735
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/qos/profile/entry[@name="default"]
-    element: |-
-        <class-bandwidth-type>
-          <mbps>
-            <class>
-              <entry name="class1">
-                <priority>real-time</priority>
-              </entry>
-              <entry name="class2">
-                <priority>high</priority>
-              </entry>
-              <entry name="class3">
-                <priority>high</priority>
-              </entry>
-              <entry name="class4">
-                <priority>medium</priority>
-              </entry>
-              <entry name="class5">
-                <priority>medium</priority>
-              </entry>
-              <entry name="class6">
-                <priority>low</priority>
-              </entry>
-              <entry name="class7">
-                <priority>low</priority>
-              </entry>
-              <entry name="class8">
-                <priority>low</priority>
-              </entry>
-            </class>
-          </mbps>
-        </class-bandwidth-type>
--   name: setting-461888
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig
-    element: |-
-        <setting>
-          <config>
-            <rematch>yes</rematch>
-          </config>
-          <management>
-            <hostname-type-in-syslog>FQDN</hostname-type-in-syslog>
-            <initcfg>
-              <type>
-                <static/>
-              </type>
-              <ip-address>192.168.128.101</ip-address>
-              <default-gateway>192.168.128.1</default-gateway>
-              <netmask>255.255.255.0</netmask>
-              <hostname>t131_Prisma-Access-NGFW-1</hostname>
-              <dns-primary>4.2.2.2</dns-primary>
-            </initcfg>
-          </management>
-          <auto-mac-detect>yes</auto-mac-detect>
-        </setting>
+    cmd: set
+
 -   name: entry-84714
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
     element: |-
@@ -283,6 +190,8 @@ snippets:
           <action>allow</action>
           <disabled>yes</disabled>
         </entry>
+    cmd: set
+
 -   name: entry-216649
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
     element: |-
@@ -319,3 +228,5 @@ snippets:
           </destination-hip>
           <action>allow</action>
         </entry>
+    cmd: set
+
