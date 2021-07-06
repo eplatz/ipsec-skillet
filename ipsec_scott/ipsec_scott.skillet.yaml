@@ -14,6 +14,16 @@ variables: []
 
 snippets:
 
+-   name: primary-75751
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig/system/dns-setting/servers
+    element: <primary>1.1.1.1</primary>
+    cmd: set
+
+-   name: secondary-447238
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig/system/dns-setting/servers
+    element: <secondary>1.0.0.1</secondary>
+    cmd: set
+
 -   name: entry-448279
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]/routing-table/ip/static-route
     element: |-
