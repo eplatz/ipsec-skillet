@@ -190,6 +190,12 @@ snippets:
         </tunnel>
     cmd: set
 
+-   name: import
+    cmd: set
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="{{
+        vsys_name }}"]/import/network/interface
+    element: <member>{{ tunnel_interface_name }}</member>
+
 -   name: interface-853149
     cmd: set
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="{{
