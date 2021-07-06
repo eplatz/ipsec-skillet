@@ -1,0 +1,321 @@
+name: ipsec_skillet2
+label: IPSEC Config Skillet
+description: Skillet Generated from 10.70.221.148 using network_pre_ipsec2.xml and
+    ipsec_config_2.xml
+type: panos
+labels:
+    collection: Unknown
+variables: []
+snippets:
+-   name: update-server-499915
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig/system
+    element: <update-server>updates.paloaltonetworks.com</update-server>
+-   name: update-schedule-561153
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig/system
+    element: |-
+        <update-schedule>
+          <threats>
+            <recurring>
+              <weekly>
+                <day-of-week>friday</day-of-week>
+                <at>11:20</at>
+                <action>download-only</action>
+              </weekly>
+            </recurring>
+          </threats>
+        </update-schedule>
+-   name: timezone-77070
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig/system
+    element: <timezone>US/Pacific</timezone>
+-   name: service-493937
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig/system
+    element: |-
+        <service>
+          <disable-telnet>yes</disable-telnet>
+          <disable-http>yes</disable-http>
+        </service>
+-   name: primary-771789
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig/system/dns-setting/servers
+    element: <primary>4.2.2.2</primary>
+-   name: tunnel-921104
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/interface
+    element: |-
+        <tunnel>
+          <units>
+            <entry name="tunnel.123">
+              <comment>tunnel-2-1</comment>
+            </entry>
+          </units>
+        </tunnel>
+-   name: gateway-666473
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/ike
+    element: |-
+        <gateway>
+          <entry name="gw-to-1">
+            <authentication>
+              <pre-shared-key>
+                <key>-AQ==IB8jxOT5t2N4quYAvwmOtD1c4fI=8dTKnz2HiAtg/m5OOnV66g8y/66Ejfl7I+J1WFwiiS3gMVfx+DZ/gyR2x+b3fs7E</key>
+              </pre-shared-key>
+            </authentication>
+            <protocol>
+              <ikev1>
+                <dpd>
+                  <enable>yes</enable>
+                </dpd>
+              </ikev1>
+              <ikev2>
+                <dpd>
+                  <enable>yes</enable>
+                </dpd>
+              </ikev2>
+            </protocol>
+            <local-address>
+              <ip>10.70.221.192/24</ip>
+              <interface>ethernet1/1</interface>
+            </local-address>
+            <protocol-common>
+              <nat-traversal>
+                <enable>no</enable>
+              </nat-traversal>
+              <fragmentation>
+                <enable>no</enable>
+              </fragmentation>
+              <passive-mode>yes</passive-mode>
+            </protocol-common>
+            <peer-address>
+              <ip>10.70.221.146</ip>
+            </peer-address>
+            <comment>gateway to 1</comment>
+          </entry>
+        </gateway>
+-   name: tunnel-605389
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/network
+    element: |-
+        <tunnel>
+          <ipsec>
+            <entry name="tunnel-to-1">
+              <auto-key>
+                <ike-gateway>
+                  <entry name="gw-to-1"/>
+                </ike-gateway>
+              </auto-key>
+              <tunnel-monitor>
+                <enable>no</enable>
+              </tunnel-monitor>
+              <tunnel-interface>tunnel.123</tunnel-interface>
+              <comment>tunnel to ngfw 1</comment>
+            </entry>
+          </ipsec>
+        </tunnel>
+-   name: member-111008
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/import/network/interface
+    element: <member>tunnel.123</member>
+-   name: routing-options-731316
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]/protocol/bgp
+    element: |-
+        <routing-options>
+          <graceful-restart>
+            <enable>yes</enable>
+          </graceful-restart>
+        </routing-options>
+-   name: rip-923389
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]/protocol
+    element: |-
+        <rip>
+          <enable>no</enable>
+        </rip>
+-   name: ospf-356332
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]/protocol
+    element: |-
+        <ospf>
+          <enable>no</enable>
+        </ospf>
+-   name: ospfv3-938553
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]/protocol
+    element: |-
+        <ospfv3>
+          <enable>no</enable>
+        </ospfv3>
+-   name: member-330479
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]/interface
+    element: <member>tunnel.123</member>
+-   name: ecmp-338160
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]
+    element: |-
+        <ecmp>
+          <algorithm>
+            <ip-modulo/>
+          </algorithm>
+        </ecmp>
+-   name: routing-table-866933
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]
+    element: |-
+        <routing-table>
+          <ip>
+            <static-route>
+              <entry name="route-to-1">
+                <bfd>
+                  <profile>None</profile>
+                </bfd>
+                <interface>tunnel.123</interface>
+                <metric>10</metric>
+                <destination>172.31.0.32/27</destination>
+                <route-table>
+                  <unicast/>
+                </route-table>
+              </entry>
+              <entry name="fw dg">
+                <nexthop>
+                  <ip-address>10.70.221.146</ip-address>
+                </nexthop>
+                <bfd>
+                  <profile>None</profile>
+                </bfd>
+                <interface>ethernet1/1</interface>
+                <metric>10</metric>
+                <destination>0.0.0.0/0</destination>
+                <route-table>
+                  <unicast/>
+                </route-table>
+              </entry>
+            </static-route>
+          </ip>
+        </routing-table>
+-   name: member-118863
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/zone/entry[@name="user"]/network/layer3
+    element: <member>tunnel.123</member>
+-   name: password-complexity-70552
+    xpath: /config/mgt-config
+    element: |-
+        <password-complexity>
+          <enabled>yes</enabled>
+          <minimum-length>8</minimum-length>
+        </password-complexity>
+-   name: class-bandwidth-type-99278
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/qos/profile/entry[@name="default"]
+    element: |-
+        <class-bandwidth-type>
+          <mbps>
+            <class>
+              <entry name="class1">
+                <priority>real-time</priority>
+              </entry>
+              <entry name="class2">
+                <priority>high</priority>
+              </entry>
+              <entry name="class3">
+                <priority>high</priority>
+              </entry>
+              <entry name="class4">
+                <priority>medium</priority>
+              </entry>
+              <entry name="class5">
+                <priority>medium</priority>
+              </entry>
+              <entry name="class6">
+                <priority>low</priority>
+              </entry>
+              <entry name="class7">
+                <priority>low</priority>
+              </entry>
+              <entry name="class8">
+                <priority>low</priority>
+              </entry>
+            </class>
+          </mbps>
+        </class-bandwidth-type>
+-   name: setting-932859
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig
+    element: |-
+        <setting>
+          <config>
+            <rematch>yes</rematch>
+          </config>
+          <management>
+            <hostname-type-in-syslog>FQDN</hostname-type-in-syslog>
+            <initcfg>
+              <type>
+                <static/>
+              </type>
+              <ip-address>192.168.128.102</ip-address>
+              <default-gateway>192.168.128.1</default-gateway>
+              <netmask>255.255.255.0</netmask>
+              <hostname>t131_Prisma-Access-NGFW-2</hostname>
+              <dns-primary>4.2.2.2</dns-primary>
+            </initcfg>
+          </management>
+          <auto-mac-detect>yes</auto-mac-detect>
+        </setting>
+-   name: entry-226223
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
+    element: |-
+        <entry name="allow-all">
+          <to>
+            <member>any</member>
+          </to>
+          <from>
+            <member>any</member>
+          </from>
+          <source>
+            <member>any</member>
+          </source>
+          <destination>
+            <member>any</member>
+          </destination>
+          <source-user>
+            <member>any</member>
+          </source-user>
+          <category>
+            <member>any</member>
+          </category>
+          <application>
+            <member>any</member>
+          </application>
+          <service>
+            <member>any</member>
+          </service>
+          <source-hip>
+            <member>any</member>
+          </source-hip>
+          <destination-hip>
+            <member>any</member>
+          </destination-hip>
+          <action>allow</action>
+          <disabled>yes</disabled>
+        </entry>
+-   name: entry-217561
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
+    element: |-
+        <entry name="users-to-web">
+          <to>
+            <member>internet</member>
+          </to>
+          <from>
+            <member>user</member>
+          </from>
+          <source>
+            <member>any</member>
+          </source>
+          <destination>
+            <member>any</member>
+          </destination>
+          <source-user>
+            <member>any</member>
+          </source-user>
+          <category>
+            <member>any</member>
+          </category>
+          <application>
+            <member>any</member>
+          </application>
+          <service>
+            <member>application-default</member>
+          </service>
+          <source-hip>
+            <member>any</member>
+          </source-hip>
+          <destination-hip>
+            <member>any</member>
+          </destination-hip>
+          <action>allow</action>
+        </entry>
