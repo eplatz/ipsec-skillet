@@ -14,6 +14,63 @@ variables: []
 
 snippets:
 
+-   name: entry-448279
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]/routing-table/ip/static-route
+    element: |-
+        <entry name="dr">
+          <nexthop>
+            <ip-address>10.70.221.192</ip-address>
+          </nexthop>
+          <bfd>
+            <profile>None</profile>
+          </bfd>
+          <interface>ethernet1/1</interface>
+          <metric>10</metric>
+          <destination>0.0.0.0/0</destination>
+          <route-table>
+            <unicast/>
+          </route-table>
+        </entry>
+    cmd: set
+
+-   name: entry-544792
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
+    element: |-
+        <entry name="users to web">
+          <to>
+            <member>internet</member>
+          </to>
+          <from>
+            <member>user</member>
+          </from>
+          <source>
+            <member>any</member>
+          </source>
+          <destination>
+            <member>any</member>
+          </destination>
+          <source-user>
+            <member>any</member>
+          </source-user>
+          <category>
+            <member>any</member>
+          </category>
+          <application>
+            <member>any</member>
+          </application>
+          <service>
+            <member>application-default</member>
+          </service>
+          <source-hip>
+            <member>any</member>
+          </source-hip>
+          <destination-hip>
+            <member>any</member>
+          </destination-hip>
+          <action>allow</action>
+        </entry>
+    cmd: set
+
 -   name: entry-252600
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/interface/tunnel/units
     element: |-
