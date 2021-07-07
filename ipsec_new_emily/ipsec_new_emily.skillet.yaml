@@ -12,6 +12,14 @@ description: |-
 
 
 
+
+
+
+
+
+
+
+
     ipsec_config_1.xml
 
 type: panos
@@ -119,6 +127,16 @@ variables:
     type_hint: text
     default: ''
 
+-   name: tunnel_route_name
+    description: tunnel_route_name
+    type_hint: text
+    default: ''
+
+-   name: tunnel_interface_name
+    description: tunnel_interface_name
+    type_hint: text
+    default: ''
+
 snippets:
 
 -   name: tunnel-851473
@@ -218,19 +236,25 @@ snippets:
 
 -   name: entry-666656
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="{{
-        vrouter_name }}"]/routing-table/ip/static-route
+        vrouter_name }}"]
     element: |-
-        <entry name="{{ static_route_name }}">
-          <bfd>
-            <profile>None</profile>
-          </bfd>
-          <interface>{{ tunnel_int_name }}/interface>
-          <metric>10</metric>
-          <destination>{{ remote_network_ip_cidr }}</destination>
-          <route-table>
-            <unicast/>
-          </route-table>
-        </entry>
+        <routing-table>
+          <ip>
+            <static-route>
+              <entry name="{{ tunnel_route_name }}">
+                <bfd>
+                  <profile>None</profile>
+                </bfd>
+                <interface>{{ tunnel_interface_name }}</interface>
+                <metric>10</metric>
+                <destination>{{ remote_network_ip_cidr }}</destination>
+                <route-table>
+                  <unicast/>
+                </route-table>
+              </entry>
+            </static-route>
+          </ip>
+        </routing-table>
     cmd: set
 
 -   name: class-bandwidth-type-247601
