@@ -1,60 +1,148 @@
 name: ipsec_new_emily
+
 label: IPSEC Config Skillet New
+
 description: Skillet Generated from 10.70.221.185 using network_pre_ipsec1.xml and
+
     ipsec_config_1.xml
+
 type: panos
+
 labels:
+
     collection: Unknown
-variables: []
+
+variables:
+
+-   name: tunnel_int_name
+    description: tunnel_int_name
+    type_hint: text
+    default: ''
+
+-   name: tunnel_desc
+    description: tunnel_desc
+    type_hint: text
+    default: ''
+
+-   name: gw_name
+    description: gw_name
+    type_hint: text
+    default: ''
+
+-   name: preshared_key
+    description: preshared_key
+    type_hint: text
+    default: ''
+
+-   name: local_int_address
+    description: local_int_address
+    type_hint: text
+    default: ''
+
+-   name: local_int
+    description: local_int
+    type_hint: text
+    default: ''
+
+-   name: nat_traversal
+    description: nat_traversal
+    type_hint: dropdown
+    default: ''
+    help_text: ''
+    dd_list:
+    -   key: 'Yes'
+        value: 'yes'
+    -   key: 'No'
+        value: 'no'
+
+-   name: passive_mode
+    description: passive_mode
+    type_hint: dropdown
+    default: ''
+    help_text: ''
+    dd_list:
+    -   key: 'Yes'
+        value: 'yes'
+    -   key: 'No'
+        value: 'no'
+
+-   name: peer_address
+    description: peer_address
+    type_hint: text
+    default: ''
+
+-   name: gw_desc
+    description: gw_desc
+    type_hint: text
+    default: ''
+
+-   name: ipsec_tunnel_name
+    description: ipsec_tunnel_name
+    type_hint: text
+    default: ''
+
+-   name: ipsec_tunnel_desc
+    description: ipsec_tunnel_desc
+    type_hint: text
+    default: ''
+
+-   name: vsys_name
+    description: vsys_name
+    type_hint: text
+    default: ''
+
+-   name: vrouter_name
+    description: vrouter_name
+    type_hint: text
+    default: ''
+
+-   name: static_route_name
+    description: static_route_name
+    type_hint: text
+    default: ''
+
+-   name: remote_network_ip_cidr
+    description: remote_network_ip_cidr
+    type_hint: text
+    default: ''
+
+-   name: tunnel_zone
+    description: tunnel_zone
+    type_hint: text
+    default: ''
+
+-   name: default_route_name
+    description: default_route_name
+    type_hint: text
+    default: ''
+
+-   name: nexthop
+    description: nexthop
+    type_hint: text
+    default: ''
+
 snippets:
--   name: update-server-627865
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig/system
-    element: <update-server>updates.paloaltonetworks.com</update-server>
--   name: update-schedule-646438
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig/system
-    element: |-
-        <update-schedule>
-          <threats>
-            <recurring>
-              <weekly>
-                <day-of-week>thursday</day-of-week>
-                <at>11:00</at>
-                <action>download-only</action>
-              </weekly>
-            </recurring>
-          </threats>
-        </update-schedule>
--   name: timezone-754214
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig/system
-    element: <timezone>US/Pacific</timezone>
--   name: service-234525
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig/system
-    element: |-
-        <service>
-          <disable-telnet>yes</disable-telnet>
-          <disable-http>yes</disable-http>
-        </service>
--   name: primary-511489
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig/system/dns-setting/servers
-    element: <primary>4.2.2.2</primary>
+
 -   name: tunnel-851473
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/interface
     element: |-
         <tunnel>
           <units>
-            <entry name="tunnel.123">
-              <comment>tunnel-from-1-2</comment>
+            <entry name="{{ tunnel_int_name }}">
+              <comment>{{ tunnel_desc }}</comment>
             </entry>
           </units>
         </tunnel>
+    cmd: set
+
 -   name: gateway-879712
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/ike
     element: |-
         <gateway>
-          <entry name="gw-to-2">
+          <entry name="{{ gw_name }}">
             <authentication>
               <pre-shared-key>
-                <key>-AQ==IB8jxOT5t2N4quYAvwmOtD1c4fI=8dTKnz2HiAtg/m5OOnV66g8y/66Ejfl7I+J1WFwiiS3gMVfx+DZ/gyR2x+b3fs7E</key>
+                <key>{{ preshared_key }}</key>
               </pre-shared-key>
             </authentication>
             <protocol>
@@ -70,90 +158,103 @@ snippets:
               </ikev2>
             </protocol>
             <local-address>
-              <ip>10.70.221.146/24</ip>
-              <interface>ethernet1/1</interface>
+              <ip>{{ local_int_address }}</ip>
+              <interface>{{ local_int }}</interface>
             </local-address>
             <protocol-common>
               <nat-traversal>
-                <enable>no</enable>
+                <enable>{{ nat_traversal }}</enable>
               </nat-traversal>
               <fragmentation>
                 <enable>no</enable>
               </fragmentation>
+              <passive-mode>{{ passive_mode }}</passive-mode>
             </protocol-common>
             <peer-address>
-              <ip>10.70.221.192</ip>
+              <ip>{{ peer_address }}</ip>
             </peer-address>
-            <comment>gateway to ngfw2</comment>
+            <comment>{{ gw_desc }}</comment>
           </entry>
         </gateway>
+    cmd: set
+
 -   name: tunnel-583630
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network
     element: |-
         <tunnel>
           <ipsec>
-            <entry name="tunnel-to-2">
+            <entry name="{{ ipsec_tunnel_name }}">
               <auto-key>
                 <ike-gateway>
-                  <entry name="gw-to-2"/>
+                  <entry name="{{ gw_name }}"/>
                 </ike-gateway>
               </auto-key>
               <tunnel-monitor>
                 <enable>no</enable>
               </tunnel-monitor>
-              <tunnel-interface>tunnel.123</tunnel-interface>
-              <comment>tunnel to ngfw 2</comment>
+              <tunnel-interface>{{ tunnel_int_name }}</tunnel-interface>
+              <comment>{{ ipsec_tunnel_desc }}</comment>
               <disabled>no</disabled>
             </entry>
           </ipsec>
         </tunnel>
+    cmd: set
+
 -   name: member-591117
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/import/network/interface
-    element: <member>tunnel.123</member>
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="{{
+        vsys_name }}"]/import/network/interface
+    element: <member>{{ tunnel_int_name }}</member>
+    cmd: set
+
 -   name: member-187782
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]/interface
-    element: <member>tunnel.123</member>
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="{{
+        vrouter_name }}"]/interface
+    element: <member>{{ tunnel_int_name }}</member>
+    cmd: set
+
 -   name: entry-666656
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]/routing-table/ip/static-route
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="{{
+        vrouter_name }}"]/routing-table/ip/static-route
     element: |-
-        <entry name="route-to-2">
+        <entry name="{{ static_route_name }}">
           <bfd>
             <profile>None</profile>
           </bfd>
-          <interface>tunnel.123</interface>
+          <interface>{{ tunnel_int_name }}/interface>
           <metric>10</metric>
-          <destination>172.31.0.64/27</destination>
+          <destination>{{ remote_network_ip_cidr }}</destination>
           <route-table>
             <unicast/>
           </route-table>
         </entry>
+    cmd: set
+
 -   name: entry-920291
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]/routing-table/ip/static-route
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="{{
+        vrouter_name }}"]/routing-table/ip/static-route
     element: |-
-        <entry name="fw dg">
+        <entry name="{{ default_route_name }}">
           <nexthop>
-            <ip-address>10.70.221.192</ip-address>
+            <ip-address>{{ nexthop }}</ip-address>
           </nexthop>
           <bfd>
             <profile>None</profile>
           </bfd>
-          <interface>ethernet1/1</interface>
+          <interface>{{ local_int }}</interface>
           <metric>10</metric>
           <destination>0.0.0.0/0</destination>
           <route-table>
             <unicast/>
           </route-table>
         </entry>
+    cmd: set
+
 -   name: member-679479
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/zone/entry[@name="user"]/network/layer3
-    element: <member>tunnel.123</member>
--   name: password-complexity-857398
-    xpath: /config/mgt-config
-    element: |-
-        <password-complexity>
-          <enabled>yes</enabled>
-          <minimum-length>8</minimum-length>
-        </password-complexity>
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="{{
+        vsys_name }}"]/zone/entry[@name="{{ tunnel_zone }}"]/network/layer3
+    element: <member>{{ tunnel_int_name }}</member>
+    cmd: set
+
 -   name: class-bandwidth-type-247601
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/qos/profile/entry[@name="default"]
     element: |-
@@ -187,98 +288,5 @@ snippets:
             </class>
           </mbps>
         </class-bandwidth-type>
--   name: setting-669351
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/deviceconfig
-    element: |-
-        <setting>
-          <config>
-            <rematch>yes</rematch>
-          </config>
-          <management>
-            <hostname-type-in-syslog>FQDN</hostname-type-in-syslog>
-            <initcfg>
-              <type>
-                <static/>
-              </type>
-              <ip-address>192.168.128.101</ip-address>
-              <default-gateway>192.168.128.1</default-gateway>
-              <netmask>255.255.255.0</netmask>
-              <hostname>t131_Prisma-Access-NGFW-1</hostname>
-              <dns-primary>4.2.2.2</dns-primary>
-            </initcfg>
-          </management>
-          <auto-mac-detect>yes</auto-mac-detect>
-        </setting>
--   name: entry-359196
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
-    element: |-
-        <entry name="allow-all">
-          <to>
-            <member>any</member>
-          </to>
-          <from>
-            <member>any</member>
-          </from>
-          <source>
-            <member>any</member>
-          </source>
-          <destination>
-            <member>any</member>
-          </destination>
-          <source-user>
-            <member>any</member>
-          </source-user>
-          <category>
-            <member>any</member>
-          </category>
-          <application>
-            <member>any</member>
-          </application>
-          <service>
-            <member>any</member>
-          </service>
-          <source-hip>
-            <member>any</member>
-          </source-hip>
-          <destination-hip>
-            <member>any</member>
-          </destination-hip>
-          <action>allow</action>
-          <disabled>yes</disabled>
-        </entry>
--   name: entry-14437
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
-    element: |-
-        <entry name="users-to-web">
-          <to>
-            <member>internet</member>
-          </to>
-          <from>
-            <member>user</member>
-          </from>
-          <source>
-            <member>any</member>
-          </source>
-          <destination>
-            <member>any</member>
-          </destination>
-          <source-user>
-            <member>any</member>
-          </source-user>
-          <category>
-            <member>any</member>
-          </category>
-          <application>
-            <member>any</member>
-          </application>
-          <service>
-            <member>application-default</member>
-          </service>
-          <source-hip>
-            <member>any</member>
-          </source-hip>
-          <destination-hip>
-            <member>any</member>
-          </destination-hip>
-          <action>allow</action>
-        </entry>
+    cmd: set
+
