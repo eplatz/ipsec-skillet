@@ -1,17 +1,27 @@
 name: ipsec_new_emily2
+
 label: IPSEC Config Skillet New2
+
 description: Skillet Generated from 10.70.221.185 using scott_before_1.xml and ipsec_config_1.xml
+
 type: panos
+
 labels:
+
     collection: Unknown
+
 variables: []
+
 snippets:
+
 -   name: entry-316228
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/interface/tunnel/units
     element: |-
         <entry name="tunnel.123">
           <comment>tunnel-from-1-2</comment>
         </entry>
+    cmd: set
+
 -   name: entry-677899
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/ike/gateway
     element: |-
@@ -50,6 +60,8 @@ snippets:
           </peer-address>
           <comment>gateway to ngfw2</comment>
         </entry>
+    cmd: set
+
 -   name: entry-953711
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/tunnel/ipsec
     element: |-
@@ -66,12 +78,18 @@ snippets:
           <comment>tunnel to ngfw 2</comment>
           <disabled>no</disabled>
         </entry>
+    cmd: set
+
 -   name: member-285571
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/import/network/interface
     element: <member>tunnel.123</member>
+    cmd: set
+
 -   name: member-806764
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]/interface
     element: <member>tunnel.123</member>
+    cmd: set
+
 -   name: entry-998855
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]/routing-table/ip/static-route
     element: |-
@@ -86,6 +104,10 @@ snippets:
             <unicast/>
           </route-table>
         </entry>
+    cmd: set
+
 -   name: member-803392
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/zone/entry[@name="user"]/network/layer3
     element: <member>tunnel.123</member>
+    cmd: set
+
