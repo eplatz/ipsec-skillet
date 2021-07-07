@@ -2,7 +2,9 @@ name: ipsec_new_emily
 
 label: IPSEC Config Skillet New
 
-description: Skillet Generated from 10.70.221.185 using network_pre_ipsec1.xml and
+description: |-
+
+    Skillet Generated from 10.70.221.185 using network_pre_ipsec1.xml and
 
     ipsec_config_1.xml
 
@@ -111,16 +113,6 @@ variables:
     type_hint: text
     default: ''
 
--   name: default_route_name
-    description: default_route_name
-    type_hint: text
-    default: ''
-
--   name: nexthop
-    description: nexthop
-    type_hint: text
-    default: ''
-
 snippets:
 
 -   name: tunnel-851473
@@ -223,26 +215,6 @@ snippets:
           <interface>{{ tunnel_int_name }}/interface>
           <metric>10</metric>
           <destination>{{ remote_network_ip_cidr }}</destination>
-          <route-table>
-            <unicast/>
-          </route-table>
-        </entry>
-    cmd: set
-
--   name: entry-920291
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="{{
-        vrouter_name }}"]/routing-table/ip/static-route
-    element: |-
-        <entry name="{{ default_route_name }}">
-          <nexthop>
-            <ip-address>{{ nexthop }}</ip-address>
-          </nexthop>
-          <bfd>
-            <profile>None</profile>
-          </bfd>
-          <interface>{{ local_int }}</interface>
-          <metric>10</metric>
-          <destination>0.0.0.0/0</destination>
           <route-table>
             <unicast/>
           </route-table>
