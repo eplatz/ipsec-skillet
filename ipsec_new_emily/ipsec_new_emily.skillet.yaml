@@ -6,6 +6,8 @@ description: |-
 
     Skillet Generated from 10.70.221.185 using network_pre_ipsec1.xml and
 
+
+
     ipsec_config_1.xml
 
 type: panos
@@ -127,6 +129,12 @@ snippets:
         </tunnel>
     cmd: set
 
+-   name: member-679479
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="{{
+        vsys_name }}"]/zone/entry[@name="{{ tunnel_zone }}"]/network/layer3
+    element: <member>{{ tunnel_int_name }}</member>
+    cmd: set
+
 -   name: gateway-879712
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/ike
     element: |-
@@ -219,12 +227,6 @@ snippets:
             <unicast/>
           </route-table>
         </entry>
-    cmd: set
-
--   name: member-679479
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="{{
-        vsys_name }}"]/zone/entry[@name="{{ tunnel_zone }}"]/network/layer3
-    element: <member>{{ tunnel_int_name }}</member>
     cmd: set
 
 -   name: class-bandwidth-type-247601
