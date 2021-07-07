@@ -1,0 +1,230 @@
+name: ipsec_config
+
+label: IPSEC Config Skillet
+
+description: Skillet to configure an IKE gateway and IPSEC tunnel on NGFW
+
+type: panos
+
+labels:
+
+    collection: IPSEC
+
+variables:
+
+-   name: tunnel_name
+    description: tunnel name (ex. tunnel.123)
+    type_hint: text
+    default: tunnel.123
+    help_text: ''
+
+-   name: tunnel_comment
+    description: tunnel description
+    type_hint: text
+    default: tunnel interface for IPSEC
+    help_text: ''
+
+-   name: nat_traversal
+    description: Enable NAT Traversal (Y/N)
+    type_hint: dropdown
+    default: 'no'
+    help_text: ''
+    dd_list:
+    -   key: 'Yes'
+        value: 'yes'
+    -   key: 'No'
+        value: 'no'
+
+-   name: ike_gw_name
+    description: IKE Gateway Name
+    type_hint: text
+    default: Gateway1
+    help_text: ''
+
+-   name: passive_mode
+    description: Enable Passive Mode (Y/N)
+    type_hint: dropdown
+    default: 'no'
+    help_text: ''
+    dd_list:
+    -   key: 'Yes'
+        value: 'yes'
+    -   key: 'No'
+        value: 'no'
+
+-   name: local_ip_cidr
+    description: Local Interface Address (IP/CIDR)
+    type_hint: text
+    default: 192.168.1.1/24
+    help_text: ''
+
+-   name: local_interface
+    description: 'Local Interface '
+    type_hint: text
+    default: ethernet1/1
+    help_text: ''
+
+-   name: peer_address
+    description: 'Peer Address '
+    type_hint: text
+    default: 192.168.2.1/24
+    help_text: ''
+
+-   name: gw_comment
+    description: IKE Gateway Description
+    type_hint: text
+    default: Gateway1
+    help_text: ''
+
+-   name: preshared_key
+    description: Preshared Key for IKE Gateway
+    type_hint: text
+    default: PANW123!
+    help_text: ''
+
+-   name: ipsec_tunnel_comment
+    description: IPSEC Tunnel Description
+    type_hint: text
+    default: Tunnel1
+    help_text: ''
+
+-   name: ipsec_tunnel_name
+    description: IPSEC Tunnel Name
+    type_hint: text
+    default: Tunnel1
+    help_text: ''
+
+-   name: vsys
+    description: VSYS Name
+    type_hint: text
+    default: vsys1
+    help_text: ''
+
+-   name: vrouter
+    description: Virtual Router Name
+    type_hint: text
+    default: default
+    help_text: ''
+
+-   name: static_route_name
+    description: Static Route Name
+    type_hint: text
+    default: route1
+    help_text: ''
+
+-   name: dest_ip_cidr
+    description: Destination Network Address (IP/CIDR)
+    type_hint: text
+    default: 192.168.1.0/24
+    help_text: ''
+
+-   name: tunnel_zone
+    description: Tunnel Zone
+    type_hint: text
+    default: zone1
+    help_text: ''
+
+snippets:
+
+-   name: entry-489562
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/interface/tunnel/units
+    element: |-
+        <entry name="{{ tunnel_name }}">
+          <comment>{{ tunnel_comment }}</comment>
+        </entry>
+    cmd: set
+
+-   name: entry-755707
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/ike/gateway
+    element: |-
+        <entry name="{{ ike_gw_name }}">
+          <authentication>
+            <pre-shared-key>
+              <key>{{ preshared_key }}</key>
+            </pre-shared-key>
+          </authentication>
+          <protocol>
+            <ikev1>
+              <dpd>
+                <enable>yes</enable>
+              </dpd>
+            </ikev1>
+            <ikev2>
+              <dpd>
+                <enable>yes</enable>
+              </dpd>
+            </ikev2>
+          </protocol>
+          <local-address>
+            <ip>{{ local_ip_cidr }}</ip>
+            <interface>{{ local_interface }}</interface>
+          </local-address>
+          <protocol-common>
+            <nat-traversal>
+              <enable>{{ nat_traversal }}</enable>
+            </nat-traversal>
+            <fragmentation>
+              <enable>no</enable>
+            </fragmentation>
+            <passive-mode>{{ passive_mode }}</passive-mode>
+          </protocol-common>
+          <peer-address>
+            <ip>{{ peer_address }}</ip>
+          </peer-address>
+          <comment>{{ gw_comment }}</comment>
+        </entry>
+    cmd: set
+
+-   name: entry-545373
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/tunnel/ipsec
+    element: |-
+        <entry name="{{ ipsec_tunnel_name }}">
+          <auto-key>
+            <ike-gateway>
+              <entry name="{{ ike_gw_name }}"/>
+            </ike-gateway>
+          </auto-key>
+          <tunnel-monitor>
+            <enable>no</enable>
+          </tunnel-monitor>
+          <tunnel-interface>{{ tunnel_name }}</tunnel-interface>
+          <comment>{{ ipsec_tunnel_comment }}</comment>
+          <disabled>no</disabled>
+        </entry>
+    cmd: set
+
+-   name: member-716531
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="{{
+        vsys }}"]/import/network/interface
+    element: <member>{{ tunnel_name }}</member>
+    cmd: set
+
+-   name: member-543096
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="{{
+        vrouter }}"]/interface
+    element: <member>{{ tunnel_name }}</member>
+    cmd: set
+
+-   name: entry-500416
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="{{
+        vrouter }}"]/routing-table/ip/static-route
+    element: |-
+        <entry name="{{ static_route_name }}">
+          <bfd>
+            <profile>None</profile>
+          </bfd>
+          <interface>{{ tunnel_name }}</interface>
+          <metric>10</metric>
+          <destination>{{ dest_ip_cidr }}</destination>
+          <route-table>
+            <unicast/>
+          </route-table>
+        </entry>
+    cmd: set
+
+-   name: member-443242
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="{{
+        vsys }}"]/zone/entry[@name="{{ tunnel_zone }}"]/network/layer3
+    element: <member>{{ tunnel_name }}</member>
+    cmd: set
+
